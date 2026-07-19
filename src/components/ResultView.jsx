@@ -2,13 +2,17 @@ import React from 'react';
 
 const MatrixDisplay = ({ title, matrix, subtitle, isDark }) => (
   <div className={`border rounded-2xl p-4 space-y-2 ${
-    isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-900 border-slate-800'
+    isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-100 border-slate-200'
   }`}>
-    <div className="flex justify-between items-center pb-2 border-b border-slate-800/80">
-      <h4 className="font-semibold text-xs text-slate-200">{title}</h4>
-      {subtitle && <span className="text-[10px] text-slate-400 font-mono">{subtitle}</span>}
+    <div className={`flex justify-between items-center pb-2 border-b ${
+      isDark ? 'border-slate-800/80' : 'border-slate-200'
+    }`}>
+      <h4 className={`font-semibold text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{title}</h4>
+      {subtitle && <span className={`text-[10px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{subtitle}</span>}
     </div>
-    <pre className="font-mono text-xs text-emerald-400 overflow-x-auto p-2 leading-relaxed">
+    <pre className={`font-mono text-xs overflow-x-auto p-2 leading-relaxed ${
+      isDark ? 'text-emerald-400' : 'text-indigo-600 font-semibold'
+    }`}>
       {matrix.map((row, i) => (
         <div key={i}>[ {row.map(n => n.toFixed(2).padStart(7, ' ')).join(', ')} ]</div>
       ))}
