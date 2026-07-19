@@ -135,9 +135,9 @@ export default function MatrixForm({ token, onResult, isDark }) {
             rows="6"
             value={matrixStr}
             onChange={e => setMatrixStr(e.target.value)}
-            className={`w-full p-4 border rounded-xl font-mono text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all leading-relaxed ${
+            className={`w-full p-4 border rounded-xl font-mono font-normal text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all leading-relaxed ${
               isDark 
-                ? 'bg-slate-950 border-slate-800 text-emerald-400' 
+                ? 'bg-[#272822] border-[#3e3d32] text-[#e6db74]' 
                 : 'bg-slate-100 border-slate-200 text-slate-800 focus:bg-white'
             }`}
           />
