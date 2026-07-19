@@ -18,7 +18,7 @@ const EXAMPLES = {
   ]
 };
 
-export default function MatrixForm({ token, onResult }) {
+export default function MatrixForm({ token, onResult, isDark }) {
   const [operation, setOperation] = useState('rotate');
   const [matrixStr, setMatrixStr] = useState(EXAMPLES.rotate[0].value);
   const [error, setError] = useState(null);
@@ -68,57 +68,83 @@ export default function MatrixForm({ token, onResult }) {
   };
 
   return (
-    <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 md:p-8 shadow-xl">
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800/80">
+    <div className={`border rounded-3xl p-6 shadow-xl transition-colors duration-300 ${
+      isDark 
+        ? 'bg-slate-900/80 backdrop-blur-xl border-slate-800' 
+        : 'bg-white border-slate-200 shadow-slate-200/50'
+    }`}>
+      <div className={`flex items-center justify-between mb-6 pb-4 border-b ${
+        isDark ? 'border-slate-800/80' : 'border-slate-100'
+      }`}>
         <div>
-          <h2 className="text-xl font-bold text-white tracking-tight">Procesamiento de Matriz</h2>
-          <p className="text-xs text-slate-400">Selecciona la operación y la matriz de entrada</p>
+          <h2 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            Configuración de Operación
+          </h2>
+          <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+            Ingresa la matriz y selecciona la acción
+          </p>
         </div>
-        <span className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold rounded-full uppercase tracking-wider">
-          {operation === 'rotate' ? 'Rotación 90°' : 'Factorización QR'}
+        <span className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 text-xs font-semibold rounded-full uppercase tracking-wider">
+          {operation === 'rotate' ? 'Rotación 90°' : 'QR Factor'}
         </span>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Operación</label>
-            <select 
-              value={operation} 
-              onChange={e => handleOperationChange(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-950/90 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-medium"
-            >
-              <option value="rotate">Rotar 90° Horario (Go + Node)</option>
-              <option value="qr">Factorización QR (Go + Node)</option>
-            </select>
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className={`block text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Operación Requerida
+          </label>
+          <select 
+            value={operation} 
+            onChange={e => handleOperationChange(e.target.value)}
+            className={`w-full px-4 py-2.5 border rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all ${
+              isDark 
+                ? 'bg-slate-950/90 border-slate-800 text-slate-100' 
+                : 'bg-slate-50 border-slate-300 text-slate-900'
+            }`}
+          >
+            <option value="rotate">Rotar 90° Horario (Go + Node)</option>
+            <option value="qr">Factorización QR (Go + Node)</option>
+          </select>
+        </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Cargar Ejemplo</label>
-            <select 
-              onChange={handlePresetSelect} 
-              defaultValue="0"
-              className="w-full px-4 py-3 bg-slate-950/90 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-medium"
-            >
-              {EXAMPLES[operation].map((ex, idx) => (
-                <option key={idx} value={idx}>{ex.name}</option>
-              ))}
-            </select>
-          </div>
+        <div>
+          <label className={`block text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Cargar Ejemplo Rápido
+          </label>
+          <select 
+            onChange={handlePresetSelect} 
+            defaultValue="0"
+            className={`w-full px-4 py-2.5 border rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all ${
+              isDark 
+                ? 'bg-slate-950/90 border-slate-800 text-slate-100' 
+                : 'bg-slate-50 border-slate-300 text-slate-900'
+            }`}
+          >
+            {EXAMPLES[operation].map((ex, idx) => (
+              <option key={idx} value={idx}>{ex.name}</option>
+            ))}
+          </select>
         </div>
         
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Entrada de Matriz (JSON)</label>
+          <label className={`block text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Matriz de Entrada (JSON)
+          </label>
           <textarea 
             rows="6"
             value={matrixStr}
             onChange={e => setMatrixStr(e.target.value)}
-            className="w-full p-4 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all leading-relaxed"
+            className={`w-full p-4 border rounded-xl font-mono text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all leading-relaxed ${
+              isDark 
+                ? 'bg-slate-950 border-slate-800 text-emerald-400' 
+                : 'bg-slate-900 border-slate-700 text-emerald-400'
+            }`}
           />
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
+          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-medium">
             {error}
           </div>
         )}
@@ -129,9 +155,9 @@ export default function MatrixForm({ token, onResult }) {
           className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
         >
           {loading ? (
-            <span>Procesando en Go & Node...</span>
+            <span>Procesando...</span>
           ) : (
-            <span>Calcular Matriz y Estadísticas</span>
+            <span>Calcular y Obtener Stats</span>
           )}
         </button>
       </form>
